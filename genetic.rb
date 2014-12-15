@@ -1,5 +1,5 @@
 class Genetic
-  attr_accessor :data, :evaluation
+  attr_accessor :data, :evaluate
 
   def initialize(father=[], mother=[],size, limit)
     @size = size
@@ -19,23 +19,25 @@ class Genetic
     end
   end
 
-  def make_data(father,mother)
-    length_from_father = rand(0..@size)
-    length_from_mother = @size - length_from_father
-    tmp = father[0..length_from_father] + mother[length_from_father..length_from_mother]
+  def make_data(father, mother)
+    length_from_father = rand(1..@size-1)
+    if length_from_father >= 1
+      tmp = father[0..length_from_father] + mother[(length_from_father+1)..@size-1]
+    else
+      mother
+    end
+
   end
 
   def mutation(data)
-    where = rand(0..@size)
-    val = rand(1..@limit+1)
-    if val < @limit
-      data[where] = val
-    end
+    where = rand(0..@size-1)
+    val = rand(1..@limit)
+    data[where] = val
     data
   end
 
   def make_evaluation(right_data)
-    right_data.each_with_index do |i,result|
+    right_data.each_with_index do |result,i|
       if @data[i] == result
         @evaluate += 10
       end
@@ -44,7 +46,3 @@ class Genetic
   end
 
 end
-
-tmp=Genetic.new([1,2,3,4,1,2,3,4,1,2],[4,3,2,1,4,3,2,1,4,3,], 10, 4)
-p tmp.data
-p tmp.evaluation([3,2,4,1,3,2,4,1,3,2])
