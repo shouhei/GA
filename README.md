@@ -2,7 +2,7 @@
 
 現在作成中
 
-このリポジトリは、(マッチ箱の脳)[http://www.amazon.co.jp/AI-ebook/dp/B00DT4DY0M]という本に出てくるアルゴリズムをプログラム化したものです。
+このリポジトリは、[マッチ箱の脳](http://www.amazon.co.jp/AI-ebook/dp/B00DT4DY0M)という本に出てくるアルゴリズムをプログラム化したものです。
 
 rubyで書いてみてます
 
