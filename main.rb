@@ -1,40 +1,49 @@
 # -*- coding: utf-8 -*-
 require_relative 'genetic'
 require_relative 'genetic_list'
-size = 10
-limit = 4
-
-def make_random_data(size,limit)
-  data = []
-  size.times do |i|
-    data.push(rand(1..limit))
-  end
-  data
-end
-
-def heredity(gene, size, limit, right_data)
-  p gene.father
-  if gene.father.evaluate == 100
-    p gene.generation
+class Main
+  attr_accessor :result
+  def initialize(size, limit)
+    @size = size
+    @limit = limit
+    @generation = GeneticList.new()
+    @right_data = make_random_data()
+    @size.times do
+      @generation.append(make_new_gen(make_random_data(),make_random_data()))
+    end
+    @generation.evaluate()
+    heredity()
     return
   end
-  if gene.generation > 100
-    return
+
+  private
+  def make_new_gen(father, mother)
+    Genetic.new(father, mother, @size, @limit, @right_data)
   end
-  gene.pop
-  gene.pop_size.times do |i|
-    gene.append(Genetic.new(gene.father.data ,gene.mother.data, size, limit, right_data))
+
+  def make_random_data()
+    data = []
+    @size.times do |i|
+      data.push(rand(1..@limit))
+    end
+    data
   end
-  gene.evaluate()
-  heredity(gene, size, limit, right_data)
+
+  def heredity()
+    p @generation.father
+    if @generation.father.evaluate == 100
+      @result = @generation.generation
+      return
+    end
+    @generation.pop
+    @generation.pop_size.times do |i|
+      @generation.append(make_new_gen(@generation.father.data, @generation.mother.data))
+    end
+    @generation.evaluate()
+    heredity()
+  end
+
 end
 
-time = 0
-right_data = make_random_data(size, limit)
-p right_data
-gene = GeneticList.new()
-10.times do
-  gene.append(Genetic.new(make_random_data(size,limit), make_random_data(size,limit), size, limit, right_data))
-end
-gene.evaluate()
-heredity(gene, size, limit, right_data)
+data = Main.new(10,4)
+p data.result

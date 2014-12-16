@@ -20,12 +20,16 @@ class Genetic
     if length_from_father == (@size - 1)
       father
     else
-      tmp = father[0..length_from_father] + mother[(length_from_father + 1)..@size-1]
+      father[0..length_from_father] + mother[(length_from_father + 1)..@size-1]
     end
   end
 
   def mutation(data)
-    data[rand(0..(@size - 1))] = rand(1..@limit)
+    tmp = rand(0..(@size - 1))
+    data[tmp] +=1
+    if data[tmp] == (@limit+1)
+      data[tmp] = 1
+    end
     data
   end
 
