@@ -12,34 +12,21 @@ def make_random_data(size,limit)
   data
 end
 
-
-def make_generation(gene,father, mother, size, limit, right_data, time)
-  if father.evaluate == 100
-    p time
+def heredity(gene, size, limit, right_data)
+  p gene.father
+  if gene.father.evaluate == 100
+    p gene.generation
     return
   end
-  2.times do
-    gene.sorted.pop
-  end
-
-  if time > 100
-    p '達成できませんでした'
+  if gene.generation > 100
     return
   end
-
-  generation = GeneticList.new()
-  (size - 2).times do |i|
-    generation.append(gene.sorted[i])
+  gene.pop
+  gene.pop_size.times do |i|
+    gene.append(Genetic.new(gene.father.data ,gene.mother.data, size, limit, right_data))
   end
-
-  2.times do |i|
-    genom = Genetic.new(father.data ,mother.data, size, limit)
-    genom.evaluation(right_data)
-    generation.append(genom)
-  end
-  generation.evaluate()
-  time += 1
-  make_generation(generation, generation.father, generation.mother, size, limit, right_data, time)
+  gene.evaluate()
+  heredity(gene, size, limit, right_data)
 end
 
 time = 0
@@ -47,9 +34,7 @@ right_data = make_random_data(size, limit)
 p right_data
 gene = GeneticList.new()
 10.times do
-  tmp = Genetic.new(make_random_data(size,limit), make_random_data(size,limit), size, limit)
-  tmp.evaluation(right_data)
-  gene.append(tmp)
+  gene.append(Genetic.new(make_random_data(size,limit), make_random_data(size,limit), size, limit, right_data))
 end
 gene.evaluate()
-make_generation(gene, gene.father,gene.mother,size,limit,right_data,time)
+heredity(gene, size, limit, right_data)
