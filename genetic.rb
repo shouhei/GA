@@ -10,7 +10,7 @@ class Genetic
   def make_data(father, mother, size)
     length_from_father = rand(1..(size - 1))
     if length_from_father == (size - 1)
-      father
+      father.clone
     else
       father[0..length_from_father] + mother[(length_from_father + 1)..(size-1)]
     end
