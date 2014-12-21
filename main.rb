@@ -6,12 +6,15 @@ class Main
   def initialize(size, limit)
     @size = size
     @limit = limit
-    @generation = GeneticList.new()
     @right_data = make_random_data()
+
+    seed_data = []
     @size.times do
-      @generation.append(make_new_gen(make_random_data(),make_random_data()))
+      seed_data << make_new_gen(make_random_data(),make_random_data())
     end
-    @generation.evaluate()
+
+    @generation = GeneticList.new(seed_data)
+
     heredity()
     return
   end
@@ -24,22 +27,24 @@ class Main
   def make_random_data()
     data = []
     @size.times do |i|
-      data.push(rand(1..@limit))
+      data << rand(1..@limit)
     end
     data
   end
 
   def heredity()
-    p @generation.father
-    if @generation.father.evaluate == 100
+    p @generation.datas[0]
+    if @generation.datas[0].evaluate == 100
       @result = @generation.generation
       return
     end
-    @generation.pop
-    @generation.pop_size.times do |i|
-      @generation.append(make_new_gen(@generation.father.data, @generation.mother.data))
+    if @generation.generation > 100
+      return
     end
-    @generation.evaluate()
+    @generation.pop_size.times do |i|
+      @generation.replace(make_new_gen(@generation.datas[0].data, @generation.datas[1].data))
+    end
+    @generation.alternate()
     heredity()
   end
 
